@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 mongoose.connect(
   'mongodb+srv://sandbox-downstairs:sandbox-password@sandbox-downstairs-1zqpn.mongodb.net/test?retryWrites=true&w=majority',
-  { useNewUrlParser: true }
+  { useNewUrlParser: true, useFindAndModify: false }
 );
 
 before(done => {
