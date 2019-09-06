@@ -16,6 +16,11 @@ module.exports = User = mongoose.model(
     postCount: {
       type: Number,
       default: 0
-    }
+    },
+    posts: [
+      new mongoose.Schema({
+        title: String
+      })
+    ]
   })
 );
