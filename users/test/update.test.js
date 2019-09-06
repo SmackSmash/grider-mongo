@@ -21,11 +21,11 @@ describe('updating records', () => {
     });
   };
 
-  const assertPostCount = (operation, done) => {
+  const assertLikes = (operation, done) => {
     operation.then(() => {
       User.find().then(result => {
         assert(result.length === 1);
-        assert(result[0].postCount === 1);
+        assert(result[0].likes === 1);
         done();
       });
     });
@@ -52,7 +52,7 @@ describe('updating records', () => {
     assertName(User.findByIdAndUpdate(user.id, { name: 'testicles' }), done);
   });
 
-  it('a user can have their post count incremented', done => {
-    assertPostCount(User.updateMany({ name: 'test' }, { $inc: { postCount: 1 } }), done);
+  it('a user can have their likes count incremented', done => {
+    assertLikes(User.updateMany({ name: 'test' }, { $inc: { likes: 1 } }), done);
   });
 });
