@@ -21,6 +21,16 @@ describe('updating records', () => {
     });
   };
 
+  const assertPostCount = (operation, done) => {
+    operation.then(() => {
+      User.find().then(result => {
+        assert(result.length === 1);
+        assert(result[0].postCount === 1);
+        done();
+      });
+    });
+  };
+
   it('instance set and save', done => {
     user.name = 'testicles';
     assertName(user.save(), done);
@@ -40,5 +50,9 @@ describe('updating records', () => {
 
   it('model class can find by ID and update', done => {
     assertName(User.findByIdAndUpdate(user.id, { name: 'testicles' }), done);
+  });
+
+  it('a user can have their post count incremented', done => {
+    assertPostCount(User.updateMany({ name: 'test' }, { $inc: { postCount: 1 } }), done);
   });
 });
