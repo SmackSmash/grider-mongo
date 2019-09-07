@@ -29,8 +29,27 @@ describe('associating records', () => {
   });
 
   it('saves a relation between a user and a blog post', async () => {
-    const result = await User.findOne({ name: 'test user' }).populate('blogPosts');
-    console.log(result.blogPosts[0]);
-    assert(result.blogPosts[0].title === 'test title');
+    const user = await User.findOne({ name: 'test user' }).populate('blogPosts');
+    assert(user.blogPosts[0].title === 'test title');
+  });
+
+  it('saves a full relation graph', async () => {
+    //Recursive populating of fields
+    const user = await User.findOne({ name: 'test user' }).populate({
+      path: 'blogPosts',
+      populate: {
+        path: 'comments',
+        populate: 'user'
+      }
+    });
+    assert(user.blogPosts[0].comments[0].user.name === 'test user');
+  });
+
+  it("removes a user's blogPosts via middleware when a user is removed", async () => {
+    const user = await User.findOne({ name: 'test user' });
+    // MUST USE .REMOVE() ON THE INSTANCE RATHER THAN USING A CLASS METHOD, OTHERWISE PRE 'REMOVE' MIDDLEWARE WILL NOT RUN!
+    await user.remove();
+    const postCount = await BlogPost.countDocuments();
+    assert(postCount === 0);
   });
 });

@@ -34,4 +34,16 @@ UserSchema.virtual('postCount').get(function() {
   return this.posts.length;
 });
 
+UserSchema.pre('save', () => {
+  console.log('Saving user');
+});
+
+UserSchema.pre('remove', async function(next) {
+  // Import already registered mongoose model
+  const BlogPost = mongoose.model('blogpost');
+  // MAKE SURE TO USE _ID HERE AS IT WILL OTHERWISE NOT BE COESRCED!
+  await BlogPost.deleteMany({ _id: { $in: this.blogPosts } });
+  next();
+});
+
 module.exports = User = mongoose.model('user', UserSchema);
