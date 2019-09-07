@@ -9,12 +9,8 @@ before(done => {
   mongoose.connection.once('open', () => done()).on('error', error => console.log(error.message));
 });
 
-beforeEach(done => {
-  mongoose.connection.collection('users').drop(() => {
-    mongoose.connection.collection('comments').drop(() => {
-      mongoose.connection.collection('blogposts').drop(() => {
-        done();
-      });
-    });
-  });
+beforeEach(async () => {
+  const collections = await mongoose.connection.db.listCollections().toArray();
+  const collectionsArray = collections.map(collection => collection.name);
+  collectionsArray.forEach(collection => mongoose.connection.collection(collection).drop());
 });
