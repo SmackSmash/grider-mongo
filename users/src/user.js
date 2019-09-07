@@ -34,10 +34,6 @@ UserSchema.virtual('postCount').get(function() {
   return this.posts.length;
 });
 
-UserSchema.pre('save', () => {
-  console.log('Saving user');
-});
-
 UserSchema.pre('remove', async function(next) {
   // Import already registered mongoose model
   const BlogPost = mongoose.model('blogpost');
