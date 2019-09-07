@@ -15,6 +15,12 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  blogPosts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'blogpost'
+    }
+  ],
   posts: [
     new mongoose.Schema({
       title: String

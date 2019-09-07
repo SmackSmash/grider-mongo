@@ -10,9 +10,11 @@ before(done => {
 });
 
 beforeEach(done => {
-  mongoose.connection.collection('users').drop(() => done());
-});
-
-afterEach(done => {
-  mongoose.connection.collection('users').drop(() => done());
+  mongoose.connection.collection('users').drop(() => {
+    mongoose.connection.collection('comments').drop(() => {
+      mongoose.connection.collection('blogposts').drop(() => {
+        done();
+      });
+    });
+  });
 });
